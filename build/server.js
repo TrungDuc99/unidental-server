@@ -18,7 +18,7 @@ app.use(express_1.default.json());
 var http = require('http').Server(app);
 var socketIO = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:4000".concat(PORT),
+        origin: "http://localhost:".concat(PORT),
     },
 });
 app.use(bodyParser.urlencoded({ extended: true }));

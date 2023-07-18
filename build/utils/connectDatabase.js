@@ -9,7 +9,7 @@ var connectDatabase = function () {
     mongoose_1.default.Promise = require('bluebird');
     var urlConnection = "mongodb+srv://".concat(process.env.DB_USERNAME, ":").concat(process.env.DB_PASSWORD, "@").concat(process.env.DB_URLDEV || process.env.DB_URL, "/").concat(process.env.DB_NAME);
     mongoose_1.default
-        .connect(urlConnection)
+        .connect("mongodb+srv://".concat(process.env.DB_USERNAME, ":").concat(process.env.DB_PASSWORD, "@").concat(process.env.DB_URLDEV || process.env.DB_URL, "/").concat(process.env.DB_NAME))
         .then(function () {
         console.log('Database connection created');
     })
