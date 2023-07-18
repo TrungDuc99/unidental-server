@@ -17,7 +17,7 @@ app.use(express.json())
 const http = require('http').Server(app)
 const socketIO = require('socket.io')(http, {
   cors: {
-    origin: `http://localhost:4000${PORT}`,
+    origin: `http://localhost:${PORT}`,
   },
 })
 
