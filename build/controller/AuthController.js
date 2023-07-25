@@ -41,6 +41,7 @@ var jwt = require('jsonwebtoken');
 require('dotenv').config();
 var bcrypt = require('bcrypt');
 var secretKey = process.env.TOKEN_SECRET_KEY;
+var secretKeyID = process.env.TOKEN_SECRET_KEY_ID_COCIAL;
 var AuthCallback = /** @class */ (function () {
     function AuthCallback() {
     }
@@ -88,20 +89,62 @@ var AuthCallback = /** @class */ (function () {
             });
         });
     };
+    AuthCallback.loginBySocial = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                try {
+                    console.log('====================================');
+                    console.log(req.body);
+                    console.log('====================================');
+                    // const user = await UserModel.findOne({ id: id })
+                    // if (user) {
+                    //   const token = jwt.sign(
+                    //     {
+                    //       user: {
+                    //         uid: user._id,
+                    //         email: user.email,
+                    //         name: user.name,
+                    //         phone: user.phone,
+                    //         address: user.address,
+                    //       },
+                    //     },
+                    //     secretKey
+                    //   )
+                    //   return res.status(200).send({ token, newUser: false })
+                    // } else {
+                    //   const token = jwt.sign(
+                    //     {
+                    //       user: {
+                    //         ...data,
+                    //       },
+                    //     },
+                    //     secretKey
+                    //   )
+                    //   return res.status(200).send({ token, newUser: true })
+                    // }
+                }
+                catch (err) {
+                    res.status(500).json({ error: err });
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
     AuthCallback.register = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, email, name, password, phone, address, avatarUrl, hashedPassword, payload, err_2;
+            var _a, email, id, name, password, phone, address, avatarUrl, hashedPassword, payload, err_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _b.trys.push([0, 3, , 4]);
-                        _a = req.body, email = _a.email, name = _a.name, password = _a.password, phone = _a.phone, address = _a.address, avatarUrl = _a.avatarUrl;
+                        _a = req.body, email = _a.email, id = _a.id, name = _a.name, password = _a.password, phone = _a.phone, address = _a.address, avatarUrl = _a.avatarUrl;
                         return [4 /*yield*/, bcrypt.hash(password, 10)];
                     case 1:
                         hashedPassword = _b.sent();
                         return [4 /*yield*/, models_1.UserModel.create({
                                 email: email,
                                 name: name,
+                                id: id,
                                 password: hashedPassword,
                                 phone: phone,
                                 avatarUrl: avatarUrl,
@@ -119,9 +162,36 @@ var AuthCallback = /** @class */ (function () {
             });
         });
     };
+    AuthCallback.registerBySocial = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, email, id, name, birthday, avatarUrl, payload, err_3;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        _a = req.body, email = _a.email, id = _a.id, name = _a.name, birthday = _a.birthday, avatarUrl = _a.avatarUrl;
+                        return [4 /*yield*/, models_1.UserModel.create({
+                                email: email,
+                                name: name,
+                                id: id,
+                                birthday: birthday,
+                                avatarUrl: avatarUrl,
+                            })];
+                    case 1:
+                        payload = _b.sent();
+                        return [2 /*return*/, res.json({ success: true, data: payload })];
+                    case 2:
+                        err_3 = _b.sent();
+                        res.status(500).json({ error: err_3 });
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     AuthCallback.logout = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, name, description, image, id, payload, err_3;
+            var _a, name, description, image, id, payload, err_4;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -137,8 +207,8 @@ var AuthCallback = /** @class */ (function () {
                         payload = _b.sent();
                         return [2 /*return*/, res.json({ success: true, data: payload })];
                     case 2:
-                        err_3 = _b.sent();
-                        res.status(500).json({ error: err_3 });
+                        err_4 = _b.sent();
+                        res.status(500).json({ error: err_4 });
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

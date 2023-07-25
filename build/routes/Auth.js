@@ -8,6 +8,8 @@ var AuthController_1 = __importDefault(require("../controller/AuthController"));
 var AuthenticateToken_1 = require("../middleware/AuthenticateToken");
 var AuthRouter = (0, express_1.Router)();
 AuthRouter.post('/login', AuthController_1.default.login);
+AuthRouter.post('/loginbysocial', AuthController_1.default.loginBySocial);
 AuthRouter.post('/register', AuthController_1.default.register);
+AuthRouter.post('/registerbysocial', AuthController_1.default.registerBySocial);
 AuthRouter.get('/me', AuthenticateToken_1.authenticateToken, AuthController_1.default.me);
 exports.default = AuthRouter;
