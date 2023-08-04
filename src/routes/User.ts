@@ -6,6 +6,7 @@ const UserRouter = Router()
 
 UserRouter.get('/', authenticateToken, UserCallback.get)
 UserRouter.get('/:id', authenticateToken, UserCallback.getOne)
+UserRouter.get('/search/:search', authenticateToken, UserCallback.searchUser)
 UserRouter.post('/', authenticateToken, UserCallback.create)
 UserRouter.put('/:id', authenticateToken, UserCallback.update)
 UserRouter.delete('/:id', authenticateToken, UserCallback.delete)

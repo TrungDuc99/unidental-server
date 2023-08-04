@@ -14,13 +14,6 @@ const PORT = parseInt(<string>process.env.PORT, 10) || 9888
 
 connectDatabase()
 app.use(express.json())
-const http = require('http').Server(app)
-const socketIO = require('socket.io')(http, {
-  cors: {
-    origin: `http://localhost:${PORT}`,
-  },
-})
-
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 app.use(morgan('dev'))
@@ -29,50 +22,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`)
 })
-
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+
 //Config chat settings
 const generateID = () => Math.random().toString(36).substring(2, 10)
 let chatRooms: any = []
-
-socketIO.on('connection', (socket: any) => {
-  console.log(`⚡: ${socket.id} user just connected!`)
-
-  socket.on('createRoom', (name: any) => {
-    socket.join(name)
-    chatRooms.unshift({ id: generateID(), name, messages: [] })
-    socket.emit('roomsList', chatRooms)
-  })
-
-  socket.on('findRoom', (id: any) => {
-    let result = chatRooms.filter((room: any) => room.id == id)
-    // console.log(chatRooms);
-    socket.emit('foundRoom', result[0].messages)
-    // console.log("Messages Form", result[0].messages);
-  })
-
-  socket.on('newMessage', (data: any) => {
-    const { room_id, message, user, timestamp } = data
-    let result = chatRooms.filter((room: any) => room.id == room_id)
-    const newMessage = {
-      id: generateID(),
-      text: message,
-      user,
-      time: `${timestamp.hour}:${timestamp.mins}`,
-    }
-    console.log('New Message', newMessage)
-    socket.to(result[0].name).emit('roomMessage', newMessage)
-    result[0].messages.push(newMessage)
-
-    socket.emit('roomsList', chatRooms)
-    socket.emit('foundRoom', result[0].messages)
-  })
-  socket.on('disconnect', () => {
-    socket.disconnect()
-    console.log('🔥: A user disconnected')
-  })
-})
 
 // routes api
 app.use('/api/user', UserRouter)
@@ -81,84 +36,66 @@ app.get('/api/chats', (req, res) => {
   res.json(chatRooms)
 })
 
-// import express, { Request, Response } from 'express'
-// import connectDatabase from './utils/connectDatabase'
-// import cors from 'cors'
-// import morgan from 'morgan'
-// import path from 'path'
-// import { AuthRouter, UserRouter } from './routes'
+// const express = require("express");
+// const app = express();
+// const http = require("http").Server(app);
+// const cors = require("cors");
+// const PORT = 4000;
+// const socketIO = require("socket.io")(http, {
+// 	cors: {
+// 		origin: "http://localhost:3000",
+// 	},
+// });
 
-// const bodyParser = require('body-parser')
-// require('dotenv').config()
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(cors());
 
-// const app = express()
+// const generateID = () => Math.random().toString(36).substring(2, 10);
+// let chatRooms :any = [];
 
-// const PORT = parseInt(<string>process.env.PORT, 10) || 9888
-// const http = require('http').Server(app)
+// socketIO.on("connection", (socket) => {
+// 	console.log(`⚡: ${socket.id} user just connected!`);
 
-// const socketIO = require('socket.io')(http, {
-//   cors: {
-//     origin: 'http://localhost:9888',
-//   },
-// })
+// 	socket.on("createRoom", (name) => {
+// 		socket.join(name);
+// 		chatRooms.unshift({ id: generateID(), name, messages: [] });
+// 		socket.emit("roomsList", chatRooms);
+// 	});
 
-// connectDatabase()
-// app.use(bodyParser.urlencoded({ extended: true }))
-// app.use(cors())
-// app.use(morgan('dev'))
-// app.use(express.static(path.join(__dirname, 'public')))
+// 	socket.on("findRoom", (id) => {
+// 		let result = chatRooms.filter((room) => room.id == id);
+// 		// console.log(chatRooms);
+// 		socket.emit("foundRoom", result[0].messages);
+// 		// console.log("Messages Form", result[0].messages);
+// 	});
 
-// app.listen(PORT, () => {
-//   console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`)
-// })
+// 	socket.on("newMessage", (data) => {
+// 		const { room_id, message, user, timestamp } = data;
+// 		let result = chatRooms.filter((room) => room.id == room_id);
+// 		const newMessage = {
+// 			id: generateID(),
+// 			text: message,
+// 			user,
+// 			time: `${timestamp.hour}:${timestamp.mins}`,
+// 		};
+// 		console.log("New Message", newMessage);
+// 		socket.to(result[0].name).emit("roomMessage", newMessage);
+// 		result[0].messages.push(newMessage);
 
-// // Handle JSON body
-// app.use(express.json())
+// 		socket.emit("roomsList", chatRooms);
+// 		socket.emit("foundRoom", result[0].messages);
+// 	});
+// 	socket.on("disconnect", () => {
+// 		socket.disconnect();
+// 		console.log("🔥: A user disconnected");
+// 	});
+// });
 
-// // Config chat settings
-// const generateID = () => Math.random().toString(36).substring(2, 10)
-// let chatRooms: any = []
+// app.get("/api", (req, res) => {
+// 	res.json(chatRooms);
+// });
 
-// socketIO.on('connection', (socket: any) => {
-//   console.log(`⚡: ${socket.id} user just connected!`)
-
-//   socket.on('createRoom', (name: any) => {
-//     socket.join(name)
-//     chatRooms.unshift({ id: generateID(), name, messages: [] })
-//     socket.emit('roomsList', chatRooms)
-//   })
-
-//   socket.on('findRoom', (id: any) => {
-//     let result = chatRooms.filter((room: any) => room.id == id)
-//     socket.emit('foundRoom', result[0].messages)
-//   })
-
-//   socket.on('newMessage', (data: any) => {
-//     const { room_id, message, user, timestamp } = data
-//     let result = chatRooms.filter((room: any) => room.id == room_id)
-//     const newMessage = {
-//       id: generateID(),
-//       text: message,
-//       user,
-//       time: `${timestamp.hour}:${timestamp.mins}`,
-//     }
-//     console.log('New Message', newMessage)
-//     socket.to(result[0].name).emit('roomMessage', newMessage)
-//     result[0].messages.push(newMessage)
-
-//     socket.emit('roomsList', chatRooms)
-//     socket.emit('foundRoom', result[0].messages)
-//   })
-
-//   socket.on('disconnect', () => {
-//     console.log('🔥: A user disconnected')
-//   })
-// })
-
-// app.get('/api', (req, res) => {
-//   res.json(chatRooms)
-// })
-
-// // routes api
-// app.use('/api/user', UserRouter)
-// app.use('/api', AuthRouter)
+// http.listen(PORT, () => {
+// 	console.log(`Server listening on ${PORT}`);
+// });

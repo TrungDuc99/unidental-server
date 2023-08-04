@@ -9,6 +9,7 @@ var AuthenticateToken_1 = require("../middleware/AuthenticateToken");
 var UserRouter = (0, express_1.Router)();
 UserRouter.get('/', AuthenticateToken_1.authenticateToken, User_1.default.get);
 UserRouter.get('/:id', AuthenticateToken_1.authenticateToken, User_1.default.getOne);
+UserRouter.get('/search/:search', AuthenticateToken_1.authenticateToken, User_1.default.searchUser);
 UserRouter.post('/', AuthenticateToken_1.authenticateToken, User_1.default.create);
 UserRouter.put('/:id', AuthenticateToken_1.authenticateToken, User_1.default.update);
 UserRouter.delete('/:id', AuthenticateToken_1.authenticateToken, User_1.default.delete);

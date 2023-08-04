@@ -49,10 +49,10 @@ var UserCallback = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, models_1.UserModel.find().select('email _id name phone address created')];
+                        return [4 /*yield*/, models_1.UserModel.find().select('email _id id name phone address avatarUrl created typeAccount')];
                     case 1:
                         payload = _a.sent();
-                        return [2 /*return*/, res.json({ success: true, data: payload })];
+                        return [2 /*return*/, res.json({ succeeded: true, data: payload })];
                     case 2:
                         err_1 = _a.sent();
                         res.status(500).json({ error: err_1 });
@@ -62,18 +62,18 @@ var UserCallback = /** @class */ (function () {
             });
         });
     };
-    UserCallback.getOne = function (req, res) {
+    UserCallback.searchUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var userID, payload, err_2;
+            var name, users, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        userID = req.params.id;
-                        return [4 /*yield*/, models_1.UserModel.findOne({ _id: userID }).select('email _id name phone address created')];
+                        name = req.params.search;
+                        return [4 /*yield*/, models_1.UserModel.find({ name: { $regex: name, $options: 'i' } })];
                     case 1:
-                        payload = _a.sent();
-                        return [2 /*return*/, res.json({ success: true, data: payload })];
+                        users = _a.sent();
+                        return [2 /*return*/, res.json({ succeeded: true, data: users })];
                     case 2:
                         err_2 = _a.sent();
                         res.status(500).json({ error: err_2 });
@@ -83,27 +83,20 @@ var UserCallback = /** @class */ (function () {
             });
         });
     };
-    UserCallback.create = function (req, res) {
+    UserCallback.getOne = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, email, name, password, avatarUrl, phone, address, payload, err_3;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var userID, payload, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        _a = req.body, email = _a.email, name = _a.name, password = _a.password, avatarUrl = _a.avatarUrl, phone = _a.phone, address = _a.address;
-                        return [4 /*yield*/, models_1.UserModel.create({
-                                email: email,
-                                name: name,
-                                password: password,
-                                avatarUrl: avatarUrl,
-                                phone: phone,
-                                address: address,
-                            })];
+                        _a.trys.push([0, 2, , 3]);
+                        userID = req.params.id;
+                        return [4 /*yield*/, models_1.UserModel.findOne({ _id: userID }).select('email _id id name phone address avatarUrl created typeAccount')];
                     case 1:
-                        payload = _b.sent();
-                        return [2 /*return*/, res.json({ success: true, data: payload })];
+                        payload = _a.sent();
+                        return [2 /*return*/, res.json({ succeeded: true, data: payload })];
                     case 2:
-                        err_3 = _b.sent();
+                        err_3 = _a.sent();
                         res.status(500).json({ error: err_3 });
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -111,19 +104,26 @@ var UserCallback = /** @class */ (function () {
             });
         });
     };
-    UserCallback.update = function (req, res) {
+    UserCallback.create = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, _a, name, password, phone, address, avatarUrl, payload, err_4;
+            var _a, email, name, password, avatarUrl, phone, address, typeAccount, payload, err_4;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _b.trys.push([0, 2, , 3]);
-                        id = req.params.id;
-                        _a = req.body, name = _a.name, password = _a.password, phone = _a.phone, address = _a.address, avatarUrl = _a.avatarUrl;
-                        return [4 /*yield*/, models_1.UserModel.findOneAndUpdate({ email: id }, { name: name, password: password, phone: phone, address: address, avatarUrl: avatarUrl })];
+                        _a = req.body, email = _a.email, name = _a.name, password = _a.password, avatarUrl = _a.avatarUrl, phone = _a.phone, address = _a.address, typeAccount = _a.typeAccount;
+                        return [4 /*yield*/, models_1.UserModel.create({
+                                email: email,
+                                name: name,
+                                typeAccount: typeAccount,
+                                password: password,
+                                avatarUrl: avatarUrl,
+                                phone: phone,
+                                address: address,
+                            })];
                     case 1:
                         payload = _b.sent();
-                        return [2 /*return*/, res.json({ success: true, data: payload })];
+                        return [2 /*return*/, res.json({ succeeded: true, data: payload })];
                     case 2:
                         err_4 = _b.sent();
                         res.status(500).json({ error: err_4 });
@@ -133,9 +133,31 @@ var UserCallback = /** @class */ (function () {
             });
         });
     };
+    UserCallback.update = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, _a, name, password, phone, address, avatarUrl, typeAccount, payload, err_5;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        id = req.params.id;
+                        _a = req.body, name = _a.name, password = _a.password, phone = _a.phone, address = _a.address, avatarUrl = _a.avatarUrl, typeAccount = _a.typeAccount;
+                        return [4 /*yield*/, models_1.UserModel.findOneAndUpdate({ id: id }, { name: name, password: password, phone: phone, address: address, avatarUrl: avatarUrl, typeAccount: typeAccount })];
+                    case 1:
+                        payload = _b.sent();
+                        return [2 /*return*/, res.json({ succeeded: true, data: payload })];
+                    case 2:
+                        err_5 = _b.sent();
+                        res.status(500).json({ error: err_5 });
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     UserCallback.delete = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var userID, payload, err_5;
+            var userID, payload, err_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -146,16 +168,16 @@ var UserCallback = /** @class */ (function () {
                         payload = _a.sent();
                         if (payload.deletedCount === 0) {
                             // Trường hợp không tìm thấy bài đăng cần xóa
-                            return [2 /*return*/, res.status(404).json({ success: false, message: 'Not found' })];
+                            return [2 /*return*/, res.status(404).json({ succeeded: false, message: 'Not found' })];
                         }
                         else {
                             // Trường hợp đã xóa thành công
-                            return [2 /*return*/, res.json({ success: true, message: 'Successfully deleted' })];
+                            return [2 /*return*/, res.json({ succeeded: true, message: 'Successfully deleted' })];
                         }
                         return [3 /*break*/, 3];
                     case 2:
-                        err_5 = _a.sent();
-                        res.status(500).json({ error: err_5 });
+                        err_6 = _a.sent();
+                        res.status(500).json({ error: err_6 });
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

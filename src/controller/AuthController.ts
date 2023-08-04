@@ -27,6 +27,7 @@ export default class AuthCallback {
         {
           user: {
             uid: user._id,
+            typeAccount: user.typeAccount,
             email: user.email,
             name: user.name,
             phone: user.phone,
@@ -55,6 +56,7 @@ export default class AuthCallback {
               uid: user._id,
               id: user.id,
               avatarUrl: user.avatarUrl,
+              typeAccount: user.typeAccount,
               email: user.email,
               name: user.name,
               phone: user.phone,
@@ -95,30 +97,32 @@ export default class AuthCallback {
         email,
         name,
         id,
+        typeAccount: 0,
         password: hashedPassword,
         phone,
         avatarUrl,
         address,
       })
 
-      return res.json({ success: true, data: payload })
+      return res.json({ succeeded: true, data: payload })
     } catch (err) {
       res.status(500).json({ error: err })
     }
   }
   static async registerBySocial(req: Request, res: Response) {
     try {
-      const { email, id, name, birthday, avatarUrl } = req.body
+      const { email, id, name, birthday, avatarUrl, typeAccount } = req.body
 
       const payload = await UserModel.create({
         email,
         name,
+        typeAccount,
         id,
         birthday,
         avatarUrl,
       })
 
-      return res.json({ success: true, data: payload })
+      return res.json({ succeeded: true, data: payload })
     } catch (err) {
       res.status(500).json({ error: err })
     }
@@ -133,7 +137,7 @@ export default class AuthCallback {
         description,
         image,
       })
-      return res.json({ success: true, data: payload })
+      return res.json({ succeeded: true, data: payload })
     } catch (err) {
       res.status(500).json({ error: err })
     }

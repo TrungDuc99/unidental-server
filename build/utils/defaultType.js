@@ -14,6 +14,6 @@ exports.default = {
     bookReviews: {
         type: [{ content: { type: String }, reviewer: { type: String } }],
     },
-    email: { type: String, required: true },
-    password: { type: String, required: true },
+    email: { type: String, required: false },
+    password: { type: String, required: false },
 };

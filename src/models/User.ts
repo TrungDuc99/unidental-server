@@ -10,6 +10,7 @@ export interface UserDoc extends Document {
   password: string
   birthday: Date
   avatarUrl: string
+  typeAccount: number
   gender: string
   isAdmin: boolean
   phone: string
@@ -20,6 +21,7 @@ export interface UserDoc extends Document {
 
 const UserSchema = new Schema<UserDoc>({
   email: defaultType.email,
+  typeAccount: defaultType.requireNumber,
   gender: defaultType.string,
   id: defaultType.string,
   name: defaultType.string,

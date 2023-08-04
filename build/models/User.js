@@ -8,6 +8,7 @@ var defaultType_1 = __importDefault(require("../utils/defaultType"));
 require('dotenv').config();
 var UserSchema = new mongoose_1.Schema({
     email: defaultType_1.default.email,
+    typeAccount: defaultType_1.default.requireNumber,
     gender: defaultType_1.default.string,
     id: defaultType_1.default.string,
     name: defaultType_1.default.string,
