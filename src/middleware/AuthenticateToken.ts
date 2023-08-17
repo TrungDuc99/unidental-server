@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 
 const secretKey: any = process.env.TOKEN_SECRET_KEY
 
-interface User {
+export interface User {
   id: string
   username: string
   email: string
